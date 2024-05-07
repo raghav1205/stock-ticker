@@ -29,9 +29,6 @@ jobs:
           push: true
           tags: ${{ secrets.DOCKER_USERNAME }}/stock-ticker:latest
       
-      - name: Deploy to Docker Hub
-        run: docker pull ${{ secrets.DOCKER_USERNAME }}/stock-ticker:latest
-      
       - name: Verify Pushed Image
         run: docker pull ${{ secrets.DOCKER_USERNAME }}/stock-ticker:latest
       
@@ -42,27 +39,11 @@ jobs:
           username: ${{ secrets.SSH_USERNAME }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
-           sudo docker stop raghav1205/stock-ticker || true
-           sudo docker rm raghav1205/stock-ticker || true
-           sudo docker rmi ${{ secrets.DOCKER_USERNAME }}/stock-ticker:latest || true
-           sudo docker pull ${{ secrets.DOCKER_USERNAME }}/stock-ticker:latest
-           sudo docker run -d -p 8080:8080 --name stock-ticker -e STOCK_API_KEY=${{ secrets.STOCK_API_KEY }} ${{ secrets.DOCKER_USERNAME }}/stock-ticker:latest 
-          - name: Deploy to EC2
-            uses: appleboy/ssh-action@master
-            with:
-              host: ${{ secrets.SSH_HOST }}
-              username: ${{ secrets.SSH_USERNAME }}
-              key: ${{ secrets.SSH_PRIVATE_KEY }}
-              script: |
-               sudo docker stop raghav1205/stock-ticker || true
-               sudo docker rm raghav1205/stock-ticker || true
-               sudo docker rmi ${{ secrets.DOCKER_USERNAME }}/stock-ticker:latest || true
-               sudo docker pull ${{ secrets.DOCKER_USERNAME }}/stock-ticker:latest
-               sudo docker run -d -p 8080:8080 --name stock-ticker -e STOCK_API_KEY=${{ secrets.STOCK_API_KEY }} ${{ secrets.DOCKER_USERNAME }}/stock-ticker:latest 
-               sudo docker stop raghav1205/redis || true
-               sudo docker rm raghav1205/redis || true
-               sudo docker rmi ${{ secrets.DOCKER_USERNAME }}/redis:latest || true
-               sudo docker pull ${{ secrets.DOCKER_USERNAME }}/redis:latest
-               sudo docker run -d -p 6379:6379 redis 
-
-
+            sudo docker stop stock-ticker || true
+            sudo docker rm stock-ticker || true
+            sudo docker rmi ${{ secrets.DOCKER_USERNAME }}/stock-ticker:latest || true
+            sudo docker pull ${{ secrets.DOCKER_USERNAME }}/stock-ticker:latest
+            sudo docker run -d -p 8080:8080 --name stock-ticker -e STOCK_API_KEY=${{ secrets.STOCK_API_KEY }} ${{ secrets.DOCKER_USERNAME }}/stock-ticker:latest
+            sudo docker stop redis || true
+            sudo docker rm redis || true
+            sudo docker run -d -p 6379:6379 redis
