@@ -1,4 +1,4 @@
-import { RedisClientType, createClient } from "redis";
+import {  RedisClientType, createClient } from "redis";
 import WebSocket from "ws";
 
 interface StockValue {
@@ -18,7 +18,9 @@ class PubSubManager {
     private subscribers: Map<string, Set<WebSocket>>;
 
     private constructor() {
-        this.redisClient = createClient();
+        this.redisClient = createClient({
+            url: 'redis://localhost:6379'
+        });
         try {
             this.redisClient.on("error", (error) => {
                 console.error(`Redis client error: ${error}`);
