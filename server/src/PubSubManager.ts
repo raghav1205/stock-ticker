@@ -19,7 +19,10 @@ class PubSubManager {
 
     private constructor() {
         this.redisClient = createClient({
-            url: 'redis://localhost:6379'
+            socket: {
+                host: '127.0.0.1',
+                port: 6379
+              },
         });
         try {
             this.redisClient.on("error", (error) => {
