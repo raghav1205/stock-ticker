@@ -33,6 +33,6 @@ catch (error) {
     console.error(`Error creating WebSocket server: ${error}`);
 }
 
-server.listen(8080, () => {
+server.listen(8080, () => { 
     console.log(`Server is running at http://localhost:8080`);
 })
