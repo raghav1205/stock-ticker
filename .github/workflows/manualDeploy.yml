@@ -37,9 +37,10 @@ jobs:
           script: |
             sudo docker stop stock-ticker || true
             sudo docker rm stock-ticker || true
-            sudo docker rmi ${{ secrets.DOCKER_USERNAME }}/stock-ticker:latest || true
-            sudo docker pull ${{ secrets.DOCKER_USERNAME }}/stock-ticker:latest
-            sudo docker run -d -p 8080:8080 --name stock-ticker -e STOCK_API_KEY=${{ secrets.STOCK_API_KEY }} ${{ secrets.DOCKER_USERNAME }}/stock-ticker:latest
             sudo docker stop redis || true
             sudo docker rm redis || true
             sudo docker run -d -p 6379:6379 redis
+            sudo docker rmi ${{ secrets.DOCKER_USERNAME }}/stock-ticker:latest || true
+            sudo docker pull ${{ secrets.DOCKER_USERNAME }}/stock-ticker:latest
+            sudo docker run -d -p 8080:8080 --name stock-ticker -e STOCK_API_KEY=${{ secrets.STOCK_API_KEY }} ${{ secrets.DOCKER_USERNAME }}/stock-ticker:latest
+            
