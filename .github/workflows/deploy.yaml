@@ -29,8 +29,8 @@ jobs:
           push: true
           tags: ${{ secrets.DOCKER_USERNAME }}/stock-ticker:latest
       
-      -name: Deploy to Docher Hub 
+      - name: Deploy to Docker Hub
         run: docker pull ${{ secrets.DOCKER_USERNAME }}/stock-ticker:latest
       
-      -name: Verify Pushed Image
+      - name: Verify Pushed Image
         run: docker pull ${{ secrets.DOCKER_USERNAME }}/stock-ticker:latest
