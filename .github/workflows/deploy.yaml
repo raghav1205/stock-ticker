@@ -27,7 +27,10 @@ jobs:
           context: ./server
           file: ./server/Dockerfile
           push: true
-          tags: ${{ secrets.DOCKER_USERNAME }}/server:latest
+          tags: ${{ secrets.DOCKER_USERNAME }}/stock-ticker:latest
+      
+      -name: Deploy to Docher Hub 
+        run: docker pull ${{ secrets.DOCKER_USERNAME }}/stock-ticker:latest
       
       -name: Verify Pushed Image
-        run: docker pull ${{ secrets.DOCKER_USERNAME }}/server:latest
+        run: docker pull ${{ secrets.DOCKER_USERNAME }}/stock-ticker:latest
