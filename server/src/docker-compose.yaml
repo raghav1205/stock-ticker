@@ -1,0 +1,14 @@
+version: 3.8
+services:
+  redis:
+    image: redis
+    container_name: redis
+    ports:
+      - "6379:6379"
+  stock-ticker:
+    image: ${{ secrets.DOCKER_USERNAME }}/stock-ticker:latest
+    container_name: stock-ticker
+    ports:
+      - "8080:8080"
+    environment:
+      STOCK_API_KEY: ${{ secrets.STOCK_API_KEY }}
