@@ -36,6 +36,7 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
             echo "STOCK_API_KEY=${{ secrets.STOCK_API_KEY }}" > stock-ticker/server/ .env
+            cat stock-ticker/server/ .env
             cd stock-ticker/server
             git pull origin master
             docker-compose down
