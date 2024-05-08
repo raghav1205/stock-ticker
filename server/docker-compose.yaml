@@ -10,5 +10,6 @@ services:
     container_name: stock-ticker
     ports:
       - "8080:8080"
+      - "4000:4000"
     environment:
       STOCK_API_KEY: ${STOCK_API_KEY}
