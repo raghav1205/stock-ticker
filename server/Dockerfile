@@ -14,4 +14,4 @@ EXPOSE 3000
 EXPOSE 4000
 
 
-CMD ["node", "dist/index.js", "dist/StockService.js"]
+CMD ["npm", "start"]
