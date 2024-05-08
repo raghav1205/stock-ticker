@@ -15,23 +15,6 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
-      - name: Login to Docker Hub
-        uses: docker/login-action@v2
-        with:
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_PASSWORD }}
-      
-      - name: Build and Push Docker image
-        uses: docker/build-push-action@v2
-        with:
-          context: ./server
-          file: ./server/Dockerfile
-          push: true
-          tags: ${{ secrets.DOCKER_USERNAME }}/stock-ticker:latest
-      
-      - name: Verify Pushed Image
-        run: docker pull ${{ secrets.DOCKER_USERNAME }}/stock-ticker:latest
-      
       - name: Deploy to EC2
         uses: appleboy/ssh-action@master
         with:
@@ -39,12 +22,9 @@ jobs:
           username: ${{ secrets.SSH_USERNAME }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
-            sudo docker stop stock-ticker || true
-            sudo docker rm stock-ticker || true
-            sudo docker rmi ${{ secrets.DOCKER_USERNAME }}/stock-ticker:latest || true
-            sudo docker pull ${{ secrets.DOCKER_USERNAME }}/stock-ticker:latest
-            sudo docker run -d -p 8080:8080 --name stock-ticker -e STOCK_API_KEY=${{ secrets.STOCK_API_KEY }} ${{ secrets.DOCKER_USERNAME }}/stock-ticker:latest
-            sudo docker stop redis || true
-            sudo docker rm redis || true
-            sudo docker run -d -p 6379:6379 redis
-            sudo docker exec -it stock-ticker docker-compose up -d
+            cd /stock-ticker/server
+            git pull origin master
+            docker-compose down
+            docker-compose up -d --build
+      
+        
