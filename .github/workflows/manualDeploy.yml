@@ -35,10 +35,9 @@ jobs:
           username: ${{ secrets.SSH_USERNAME }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
-            sudo docker stop stock-ticker || true
-            sudo docker rm stock-ticker || true
-            sudo docker rmi ${{ secrets.DOCKER_USERNAME }}/stock-ticker:latest || true
-            sudo docker pull ${{ secrets.DOCKER_USERNAME }}/stock-ticker:latest
-            sudo docker exec stop-ticker docker-compose down
-            sudo docker exec stop-ticker docker-compose pull
-            sudo docker exec stop-ticker docker-compose up -d --force-recreate            
+            echo "STOCK_API_KEY=${{ secrets.STOCK_API_KEY }}" > stock-ticker/server/ .env
+            cd stock-ticker/server
+            git pull origin master
+            docker-compose down
+            docker-compose up -d --build
+      
