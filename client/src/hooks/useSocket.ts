@@ -9,7 +9,7 @@ const useSocket = (url: string) => {
     useEffect(() => {
         const ws = new WebSocket(url);
         ws.onopen = () => {
-            // console.log('Connected to server');
+            console.log('Connected to server');
             ws.send(JSON.stringify({ payload: 'AAPL', action: 'subscribe' }));
             ws.send(JSON.stringify({ payload: 'GOOGL', action: 'subscribe' }));
             //     // newSocket.send(JSON.stringify({ payload: 'MSFT', action: 'subscribe' }));
@@ -17,7 +17,7 @@ const useSocket = (url: string) => {
 
 
         ws.onmessage = (event) => {
-            // console.log(`Received message from server: ${event.data}`);
+            console.log(`Received message from server: ${event.data}`);
             // setMessage(JSON.parse(event.data));
             console.log('Received message from server');
             dispatch(setData(JSON.parse(event.data)));
