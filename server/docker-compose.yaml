@@ -6,7 +6,7 @@ services:
     ports:
       - "6379:6379"
   stock-ticker:
-    image: ${{ secrets.DOCKER_USERNAME }}/stock-ticker:latest
+    image: raghav1205/stock-ticker:latest
     container_name: stock-ticker
     ports:
       - "8080:8080"
