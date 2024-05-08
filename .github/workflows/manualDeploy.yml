@@ -35,6 +35,9 @@ jobs:
           username: ${{ secrets.SSH_USERNAME }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
+            mkdir -p stock-ticker/server
+            echo "STOCK_API_KEY=${{ secrets.STOCK_API_KEY }}" > stock-ticker/server/.env
+            cat stock-ticker/server/.env
             cd stock-ticker/server
             git pull origin master
             sudo docker-compose down
