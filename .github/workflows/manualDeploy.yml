@@ -39,10 +39,6 @@ jobs:
             sudo docker rm stock-ticker || true
             sudo docker rmi ${{ secrets.DOCKER_USERNAME }}/stock-ticker:latest || true
             sudo docker pull ${{ secrets.DOCKER_USERNAME }}/stock-ticker:latest
-              sudo docker stop stock-ticker || true
-            sudo docker rm stock-ticker || true
-            sudo docker rmi ${{ secrets.DOCKER_USERNAME }}/stock-ticker:latest || true
-            sudo docker pull ${{ secrets.DOCKER_USERNAME }}/stock-ticker:latest
-            sudo docker exec compose-manager docker-compose down
-            sudo docker exec compose-manager docker-compose pull
-            sudo docker exec compose-manager docker-compose up -d --force-recreate            
+            sudo docker exec stop-ticker docker-compose down
+            sudo docker exec stop-ticker docker-compose pull
+            sudo docker exec stop-ticker docker-compose up -d --force-recreate            
