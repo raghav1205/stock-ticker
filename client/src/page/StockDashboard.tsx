@@ -5,7 +5,7 @@ import 'chart.js/auto';
 import { StockItemData } from "../types/StockItemData";
 
 const StockDashboard = () => {
-    useSocket('ws://stock-ticker.multiplayerbackend.tech');
+    useSocket('wss://stock-ticker.multiplayerbackend.tech');
     const data = useSelector((state: any) => state.data);
     return (
         <div className="p-5 pt-8 dark:bg-[#121212] bg-[#ffff] w-full dark:text-white h-screen">
