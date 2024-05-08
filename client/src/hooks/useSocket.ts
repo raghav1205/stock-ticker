@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import {  useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { setData } from "../dataSlice";
 const useSocket = (url: string) => {
@@ -25,9 +25,13 @@ const useSocket = (url: string) => {
 
         ws.onclose = () => {
             console.log('Disconnected from server');
+            
         }
 
         // setSocket(ws);
+        setInterval(() => {
+            ws.send(JSON.stringify({ type: 'keep-alive', timestamp: Date.now() }));
+          }, 30000);
 
         return () => {
             ws.close();

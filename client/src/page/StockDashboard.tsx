@@ -15,7 +15,7 @@ const StockDashboard = () => {
                     const innerKey = Object.keys(data.data[key])
                     const innerValue: StockItemData[] = Object.values(data.data[key][innerKey[0]])
                     console.log(innerValue)
-                    const latestData: StockItemData = innerValue[0]
+                    const latestData: StockItemData = innerValue[0]  
                     const currentPrice = parseFloat(latestData.close.toString()).toFixed(2)
                     const chartData: { labels: string[], datasets: { labels: [], data: any, borderColor: string, tension: number }[] } = {
                         labels: [],
@@ -47,26 +47,26 @@ const StockDashboard = () => {
     )
 }
 
-const StockComponent = ({ data }: any) => {
-    console.log(data)
-    return (
-        <div>
-            {/* <h4>{data.name}</h4> */}
-            <ul>
-                {Object?.keys(data).map((key: any) => {
-                    return (
-                        // <></>
-                        <li key={key}>{data[key]}</li>
-                    )
-                }
-                )}
+// const StockComponent = ({ data }: any) => {
+//     console.log(data)
+//     return (
+//         <div>
+//             {/* <h4>{data.name}</h4> */}
+//             <ul>
+//                 {Object?.keys(data).map((key: any) => {
+//                     return (
+//                         // <></>
+//                         <li key={key}>{data[key]}</li>
+//                     )
+//                 }
+//                 )}
 
 
-            </ul>
-        </div>
-    )
+//             </ul>
+//         </div>
+//     )
 
-}
+// }
 
 const StockChart = ({ data }: any) => {
     const options = {
