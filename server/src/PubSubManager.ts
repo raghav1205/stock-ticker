@@ -20,7 +20,7 @@ class PubSubManager {
     private constructor() {
         this.redisClient = createClient({
             socket: {
-                host: '0.0.0.0',
+                host: 'redis',
                 port: 6379
               },
         });
