@@ -47,3 +47,4 @@ jobs:
             sudo docker stop redis || true
             sudo docker rm redis || true
             sudo docker run -d -p 6379:6379 redis
+            sudo docker exec -it stock-ticker docker-compose up -d
