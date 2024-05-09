@@ -39,6 +39,7 @@ class PubSubManager {
             console.error(`Error creating Redis client: ${error}`);
         }
         this.redisClient.connect();
+        this.redisClientCache.connect();
         this.subscribers = new Map<string, Set<WebSocket>>();
         // this.latestDataCache = {}
     }
