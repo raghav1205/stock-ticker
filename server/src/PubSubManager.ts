@@ -15,6 +15,7 @@ class PubSubManager {
 
     private static instance: PubSubManager;
     private redisClient: RedisClientType
+    private redisClientCache: RedisClientType
     private subscribers: Map<string, Set<WebSocket>>;
     // private latestDataCache: StockObjInterface
 
@@ -22,8 +23,16 @@ class PubSubManager {
         this.redisClient = createClient({
             url: 'redis://redis:6379'
         });
+        this.redisClientCache = createClient({
+            url: 'redis://localhost:6379' 
+        });
+
+
         try {
             this.redisClient.on("error", (error) => {
+                console.error(`Redis client error: ${error}`);
+            });
+            this.redisClientCache.on("error", (error) => {
                 console.error(`Redis client error: ${error}`);
             });
         } catch (error) {
@@ -115,21 +124,21 @@ class PubSubManager {
 
     public addDataToCache(symbol: string, data: any): void {
         console.log(`Adding data to cache for ${symbol}`);
-        this.redisClient.set(symbol, JSON.stringify(data));
+        this.redisClientCache.set(symbol, JSON.stringify(data));
         // this.latestDataCache[symbol] = data;
-        console.log(`current cache after adding data: ${JSON.stringify(this.redisClient.get(symbol))}`);
+        console.log(`current cache after adding data: ${JSON.stringify(this.redisClientCache.get(symbol))}`);
 
     }
 
     public sendDataFromCache(symbol: string, ws: WebSocket): any {
-        console.log(`current cache: ${JSON.stringify(this.redisClient.get(symbol))}`);
+        console.log(`current cache: ${JSON.stringify(this.redisClientCache.get(symbol))}`);
         // if (this.latestDataCache[symbol]) {
-            // console.log(`Sending data from cache to ${symbol}`);
-            const data = this.redisClient.get(symbol);
-            if (data) {
-                ws.send(JSON.stringify(data));
-            }
-            // ws.send(JSON.stringify(this.latestDataCache[symbol]));
+        // console.log(`Sending data from cache to ${symbol}`);
+        const data = this.redisClientCache.get(symbol);
+        if (data) {
+            ws.send(JSON.stringify(data));
+        }
+        // ws.send(JSON.stringify(this.latestDataCache[symbol]));
         // }
     }
 }
