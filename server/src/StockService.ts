@@ -12,10 +12,10 @@ const PORT = 4000;
 
 
 const publishStockPrice = async (symbols: string[]) => {
-    // I want date in mm/dd/yyyy format the timezone is UTC
     const today = new Date();
-    const start_date = `${today.getUTCMonth() + 1}/${today.getUTCDate()-1}/${today.getUTCFullYear()}`;
-    const end_date = `${today.getUTCMonth() + 1}/${today.getUTCDate()}/${today.getUTCFullYear()}`;
+    const currentTime = `${today.getUTCHours() - 4}:${today.getUTCMinutes()}:${today.getUTCSeconds()}`;
+    const start_date = `${today.getUTCMonth() + 1}/${today.getUTCDate()}/${today.getUTCFullYear()}:00:00:00`;
+    const end_date = `${today.getUTCMonth() + 1}/${today.getUTCDate()}/${today.getUTCFullYear()}:${currentTime}`;
 
     console.log(start_date, end_date)
     try {
