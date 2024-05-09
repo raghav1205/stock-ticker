@@ -126,7 +126,7 @@ class PubSubManager {
     public async addDataToCache(symbol: string, data: any) {
         console.log(`Adding data to cache for ${symbol}`);
         try {
-            await this.redisClientCache.set(symbol, JSON.stringify(data));
+            await this.redisClientCache.set(symbol, JSON.stringify(data.values));
             let cachedData = await this.redisClientCache.get(symbol); // To confirm data was added
             console.log(`current cache after adding data: ${cachedData}`);
         } catch (error) {
