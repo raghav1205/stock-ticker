@@ -141,11 +141,11 @@ class PubSubManager {
             const data = await this.redisClientCache.get(symbol);
             
             if (data) {
-                const newdata = JSON.parse(data);
-                const stockObj: StockObjInterface = {}
-                stockObj[symbol] = { values: newdata[symbol].values}
-                console.log(`Sending data from cache for ${symbol}: ${JSON.stringify(stockObj)}`);
-                ws.send(JSON.stringify(stockObj));
+                // const newdata = JSON.parse(data);
+                // const stockObj: StockObjInterface = {}
+                // stockObj[symbol] = { values: newdata[symbol].values}
+                // console.log(`Sending data from cache for ${symbol}: ${JSON.stringify(stockObj)}`);
+                ws.send(JSON.stringify(data));
             }
         } catch (error) {
             console.error('Redis error when sending data:', error);
