@@ -143,7 +143,7 @@ class PubSubManager {
             if (data) {
                 const newdata = JSON.parse(data);
                 newdata[symbol] = { values:  newdata.values }
-                ws.send(newdata);
+                ws.send(JSON.stringify(newdata));
             }
         } catch (error) {
             console.error('Redis error when sending data:', error);
