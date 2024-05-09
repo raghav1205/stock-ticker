@@ -1,4 +1,4 @@
-import {  RedisClientType, createClient } from "redis";
+import { RedisClientType, createClient } from "redis";
 import WebSocket from "ws";
 
 interface StockValue {
@@ -16,11 +16,11 @@ class PubSubManager {
     private static instance: PubSubManager;
     private redisClient: RedisClientType
     private subscribers: Map<string, Set<WebSocket>>;
-    private latestDataCache: StockObjInterface
+    // private latestDataCache: StockObjInterface
 
     private constructor() {
         this.redisClient = createClient({
-           url: 'redis://redis:6379'
+            url: 'redis://redis:6379'
         });
         try {
             this.redisClient.on("error", (error) => {
@@ -31,7 +31,7 @@ class PubSubManager {
         }
         this.redisClient.connect();
         this.subscribers = new Map<string, Set<WebSocket>>();
-        this.latestDataCache = {}
+        // this.latestDataCache = {}
     }
 
     public static getInstance(): PubSubManager {
@@ -52,9 +52,9 @@ class PubSubManager {
         console.log(`Added user to ${symbol}. Total subscriptions: ${this.subscribers.get(symbol)!.size}`);
 
         // send data from cache initially
-        if (this.latestDataCache[symbol]) {
-            ws.send(JSON.stringify(this.latestDataCache[symbol]));
-        }
+        // if (this.latestDataCache[symbol]) {
+        //     ws.send(JSON.stringify(this.latestDataCache[symbol]));
+        // }
 
 
 
@@ -104,29 +104,33 @@ class PubSubManager {
 
     public publish(symbol: string, message: any): void {
 
-        console.log(`Publishing message to ${symbol}: ${JSON.stringify(message)}`);
+        console.log(`Publishing message to ${symbol}`);
 
         this.redisClient.publish(symbol, JSON.stringify(message)).then((res) => {
             console.log(`Published message to ${symbol}. Total subscriptions: ${res}`);
-        }
-        ).catch((error) => {
+        }).catch((error) => {
             console.error(`Error publishing to Redis: ${error}`);
         });
     }
 
     public addDataToCache(symbol: string, data: any): void {
         console.log(`Adding data to cache for ${symbol}`);
-        this.latestDataCache[symbol] = data;
-        console.log(`current cache after adding data: ${JSON.stringify(this.latestDataCache)}`);
+        this.redisClient.set(symbol, JSON.stringify(data));
+        // this.latestDataCache[symbol] = data;
+        console.log(`current cache after adding data: ${JSON.stringify(this.redisClient.get(symbol))}`);
 
     }
 
     public sendDataFromCache(symbol: string, ws: WebSocket): any {
-        console.log(`current cache: ${JSON.stringify(this.latestDataCache)}`);
-        if (this.latestDataCache[symbol]) {
-            console.log(`Sending data from cache to ${symbol}`);
-            ws.send(JSON.stringify(this.latestDataCache[symbol]));
-        }
+        console.log(`current cache: ${JSON.stringify(this.redisClient.get(symbol))}`);
+        // if (this.latestDataCache[symbol]) {
+            // console.log(`Sending data from cache to ${symbol}`);
+            const data = this.redisClient.get(symbol);
+            if (data) {
+                ws.send(JSON.stringify(data));
+            }
+            // ws.send(JSON.stringify(this.latestDataCache[symbol]));
+        // }
     }
 }
 
