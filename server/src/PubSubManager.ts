@@ -120,6 +120,7 @@ class PubSubManager {
     }
 
     public sendDataFromCache(symbol: string, ws: WebSocket): any {
+        console.log(`current cache: ${JSON.stringify(this.latestDataCache)}`);
         if (this.latestDataCache[symbol]) {
             console.log(`Sending data from cache to ${symbol}`);
             ws.send(JSON.stringify(this.latestDataCache[symbol]));

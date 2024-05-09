@@ -27,7 +27,7 @@ try {
         ws.on("close", () => {
             console.log("Client disconnected");
         });
-        // ws.send("Hello, I am a WebSocket server" );
+        ws.send("Hello, I am a WebSocket server" );
     });
 }
 catch (error) {
