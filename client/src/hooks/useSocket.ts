@@ -1,10 +1,11 @@
-import {  useEffect } from "react";
+import {  useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { setData } from "../dataSlice";
 const stocks = ['AAPL', 'GOOGL', 'MSFT', 'AMZN', 'TSLA', 'FB', 'NVDA', 'PYPL', 'ADBE', 'INTC']
 const useSocket = (url: string) => {
     // const [socket, setSocket] = useState<WebSocket | null>(null);
     // const [message, setMessage] = useState<string | null>(null);
+    const [loading, setLoading] = useState<boolean>(true);
     const dispatch = useDispatch();
     console.log('useSocket');
     useEffect(() => {
@@ -15,6 +16,7 @@ const useSocket = (url: string) => {
             for (const stock of stocks) {
                 ws.send(JSON.stringify({ payload: stock, action: 'subscribe' }));
             }
+            
             //     // newSocket.send(JSON.stringify({ payload: 'MSFT', action: 'subscribe' }));
         }
 
@@ -24,6 +26,7 @@ const useSocket = (url: string) => {
             // setMessage(JSON.parse(event.data));
             console.log('Received message from server');
             dispatch(setData(JSON.parse(event.data)));
+            setLoading(false);
         }
 
         ws.onclose = () => {
@@ -41,7 +44,7 @@ const useSocket = (url: string) => {
         }
     }, [url]);
 
-    // return {  message };
+    return {  loading };
 }
 
 export default useSocket;
