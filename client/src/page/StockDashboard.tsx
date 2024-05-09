@@ -58,7 +58,7 @@ const StockDashboard = () => {
 const Skeleton = () => {
     return (
         <div className="max-w-2xl mx-auto ">
-            {[1, 2, 3, 4, 5, 6].map(item => {
+            {[1, 2, 3, 4, 5, 6].map(() => {
                 return (
                     <div className="mx-auto grid grid-cols-3 md:grid-cols-3 font-semibold text-lg items-center justify-between px-8 py-2 rounded-md mt-5 shadow-xl dark:shadow-lg bg-[#ffff] dark:bg-[#1E1E1E] min-h-[5rem] animate-pulse">
                         <h3>Stock</h3>
