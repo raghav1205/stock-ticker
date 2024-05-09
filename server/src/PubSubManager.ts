@@ -117,6 +117,8 @@ class PubSubManager {
     public addDataToCache(symbol: string, data: any): void {
         console.log(`Adding data to cache for ${symbol}`);
         this.latestDataCache[symbol] = data;
+        console.log(`current cache after adding data: ${JSON.stringify(this.latestDataCache)}`);
+
     }
 
     public sendDataFromCache(symbol: string, ws: WebSocket): any {
