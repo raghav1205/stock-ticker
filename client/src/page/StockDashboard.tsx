@@ -6,41 +6,43 @@ import { StockItemData } from "../types/StockItemData";
 
 const StockDashboard = () => {
     useSocket('wss://stock-ticker.multiplayerbackend.tech');
-    const data = useSelector((state: any) => state.data);
+    const data = useSelector((state: any) => state.data.data);
+    console.log(data)
     return (
         <div className="p-5 pt-8 dark:bg-[#121212] bg-[#ffff] w-full dark:text-white h-screen">
             <h1 className="text-4xl text-center mb-20">Stock Ticker</h1>
             <div className="max-w-2xl mx-auto">
-                {Object.keys(data.data).map((key: any) => {
-                    const innerKey = Object.keys(data.data[key])
-                    const innerValue: StockItemData[] = Object.values(data.data[key][innerKey[0]])
-                    console.log(innerValue)
-                    const latestData: StockItemData = innerValue[0]  
-                    const currentPrice = parseFloat(latestData.close.toString()).toFixed(2)
-                    const chartData: { labels: string[], datasets: { labels: [], data: any, borderColor: string, tension: number }[] } = {
-                        labels: [],
-                        datasets: [
-                            {
-                                labels: [],
-                                data: [],
-                                borderColor: 'rgb(75, 192, 192)',
-                                tension: 0.1
-                            }
-                        ]
-                    }
-                    innerValue.forEach((value: any) => {
-                        chartData.labels.push(value.datetime)
-                        chartData.datasets[0].data.push(parseFloat(value.close))
-                    })
-                    return (
-                        <div key={key} className="mx-auto grid grid-cols-3 font-semibold text-lg h-20  items-center justify-between px-8 py-2 rounded-md mt-5   shadow-xl bg-[#ffff]   dark:bg-[#1E1E1E]">
+
+                {
+                    data.map((stock: any) => {
+                        console.log(stock)
+                        const key = Object.keys(stock)[0]
+                        const latestData: StockItemData = stock[key][0]
+                        const currentPrice = parseFloat(latestData.close.toString()).toFixed(2)
+                        const chartData: { labels: string[], datasets: { labels: [], data: any, borderColor: string, tension: number }[] } = {
+                            labels: [],
+                            datasets: [
+                                {
+                                    labels: [],
+                                    data: [],
+                                    borderColor: 'rgb(75, 192, 192)',
+                                    tension: 0.1
+                                }
+                            ]
+                        }
+                        stock[key].forEach((value: any) => {
+                            chartData.labels.push(value.datetime)
+                            chartData.datasets[0].data.push(parseFloat(value.close))
+                        })
+
+                        return <div key={key} className="mx-auto grid grid-cols-3 font-semibold text-lg h-20  items-center justify-between px-8 py-2 rounded-md mt-5   shadow-xl bg-[#ffff]   dark:bg-[#1E1E1E]">
                             <h3>{key}</h3>
                             <span>${currentPrice}</span>
                             <StockChart key={Math.random() * 10} data={chartData} />
                         </div>
-                    )
+
+                    })
                 }
-                )}
 
             </div>
         </div>
