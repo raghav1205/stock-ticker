@@ -1,8 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { StockData } from './types/StockData';
-import { StockItemData } from './types/StockItemData';
 
-const initialState: StockData = {
+
+const initialState: any = {
     data: []
 };
 
@@ -27,8 +26,8 @@ const dataSlice = createSlice({
 
                 console.log(key, action.payload[key], 'asdfksiu');
                 // });
-                const stockObj: StockItemData = { ...action.payload[key] };
-                state.data = [...state.data.filter((item: StockItemData) => !item.hasOwnProperty(key)), stockObj];
+                const stockObj = { [key]: action.payload[key] }
+                state.data = [...state.data.filter((item: any) => !item.hasOwnProperty(key)), stockObj];
                 
             });
 
