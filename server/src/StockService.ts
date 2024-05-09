@@ -36,7 +36,7 @@ const publishStockPrice = async (symbols: string[]) => {
     }
 }
 
-const stockList = ['AAPL', 'GOOGL'];
+const stockList = ['AAPL', 'GOOGL', 'MSFT', 'AMZN', 'TSLA', 'FB', 'NVDA', 'PYPL', 'ADBE', 'INTC'];
 cron.schedule('*/20 * * * *', () => {
     publishStockPrice(stockList);
 });

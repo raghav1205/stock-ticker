@@ -1,6 +1,7 @@
 import {  useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { setData } from "../dataSlice";
+const stocks = ['AAPL', 'GOOGL', 'MSFT', 'AMZN', 'TSLA', 'FB', 'NVDA', 'PYPL', 'ADBE', 'INTC']
 const useSocket = (url: string) => {
     // const [socket, setSocket] = useState<WebSocket | null>(null);
     // const [message, setMessage] = useState<string | null>(null);
@@ -10,8 +11,10 @@ const useSocket = (url: string) => {
         const ws = new WebSocket(url);
         ws.onopen = () => {
             console.log('Connected to server');
-            ws.send(JSON.stringify({ payload: 'AAPL', action: 'subscribe' }));
-            ws.send(JSON.stringify({ payload: 'GOOGL', action: 'subscribe' }));
+         
+            for (const stock of stocks) {
+                ws.send(JSON.stringify({ payload: stock, action: 'subscribe' }));
+            }
             //     // newSocket.send(JSON.stringify({ payload: 'MSFT', action: 'subscribe' }));
         }
 
