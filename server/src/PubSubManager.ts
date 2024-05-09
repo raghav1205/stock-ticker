@@ -24,7 +24,7 @@ class PubSubManager {
             url: 'redis://redis:6379'
         });
         this.redisClientCache = createClient({
-            url: 'redis://localhost:6379' 
+            url: 'redis://redis:6379' 
         });
 
 
