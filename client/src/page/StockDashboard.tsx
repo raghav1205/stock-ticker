@@ -11,44 +11,41 @@ const StockDashboard = () => {
     console.log(data)
    
     return (
-        <div className="p-5 pt-8 dark:bg-[#121212] bg-[#ffff] w-full dark:text-white h-screen">
+        <div className="p-5 pt-8 mb-8 dark:bg-[#121212] bg-[#ffff] w-full dark:text-white h-auto min-h-screen">
             <h1 className="text-4xl text-center mb-20">Stock Ticker</h1>
             <div className="max-w-2xl mx-auto ">
-
-                {
-                   data.length > 0 && data.map((stock: any) => {
-                        console.log(stock)
-                        const key = Object.keys(stock)[0]
-                        const latestData: StockItemData = stock[key][0]
-                        const currentPrice = parseFloat(latestData?.close?.toString()).toFixed(2)
-                        const chartData: { labels: string[], datasets: { labels: [], data: any, borderColor: string, tension: number }[] } = {
-                            labels: [],
-                            datasets: [
-                                {
-                                    labels: [],
-                                    data: [],
-                                    borderColor: 'rgb(75, 192, 192)',
-                                    tension: 0.1
-                                }
-                            ]
-                        }
-                        stock[key]?.forEach((value: any) => {
-                            chartData?.labels.push(value?.datetime)
-                            chartData?.datasets[0].data.push(parseFloat(value?.close))
-                        })
-
-                        return <div key={key} className="mx-auto grid grid-cols-3 font-semibold text-lg h-[5rem]  items-center justify-between px-8 py-2 rounded-md mt-5 shadow-xl dark:shadow-lg bg-[#ffff]   dark:bg-[#1E1E1E]">
-                            <h3>{key}</h3>
-                            <span>${currentPrice}</span>
-                            <StockChart key={key} data={chartData} />
-                        </div>
-
+                {data.length > 0 && data.map((stock: any) => {
+                    console.log(stock)
+                    const key = Object.keys(stock)[0]
+                    const latestData: StockItemData = stock[key][0]
+                    const currentPrice = parseFloat(latestData?.close?.toString()).toFixed(2)
+                    const chartData: { labels: string[], datasets: { labels: [], data: any, borderColor: string, tension: number }[] } = {
+                        labels: [],
+                        datasets: [
+                            {
+                                labels: [],
+                                data: [],
+                                borderColor: 'rgb(75, 192, 192)',
+                                tension: 0.1
+                            }
+                        ]
+                    }
+                    stock[key]?.forEach((value: any) => {
+                        chartData?.labels.push(value?.datetime)
+                        chartData?.datasets[0].data.push(parseFloat(value?.close))
                     })
-                }
-
+    
+                    return <div key={key} className="mx-auto grid grid-cols-3 md:grid-cols-3 font-semibold text-lg items-center justify-between px-8 py-2 rounded-md mt-5 shadow-xl dark:shadow-lg bg-[#ffff] dark:bg-[#1E1E1E] min-h-[5rem]">
+                        <h3>{key}</h3>
+                        <span>${currentPrice}</span>
+                        <StockChart key={key} data={chartData} />
+                    </div>
+                })}
             </div>
         </div>
-    )
+    );
+    
+    
 }
 
 

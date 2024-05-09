@@ -12,7 +12,7 @@ const DarkModeToggle = () => {
     }, [darkMode]);
 
     return (
-        <div className='absolute mb-3 md:right-0 10 max-h-10 md:top-0 bottom-0 right-0 mx-8 mt-2 cursor-pointer'>
+        <div className='fixed mb-3 md:right-0 10 max-h-10 md:top-0 bottom-0 right-0 mx-8 mt-2 cursor-pointer'>
             <div className='w-10 h-10 max-h-10' onClick={() => setDarkMode(!darkMode)}>
                 <svg className="fill-violet-700 block dark:hidden" fill="currentColor" viewBox="0 0 20 20">
                     <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
