@@ -24,7 +24,7 @@ class PubSubManager {
             url: 'redis://redis:6379'
         });
         this.redisClientCache = createClient({
-            url: 'redis://redis:6379' 
+            url: 'redis://redis:6379'
         });
 
 
@@ -123,24 +123,29 @@ class PubSubManager {
         });
     }
 
-    public addDataToCache(symbol: string, data: any): void {
+    public async addDataToCache(symbol: string, data: any) {
         console.log(`Adding data to cache for ${symbol}`);
-        this.redisClientCache.set(symbol, JSON.stringify(data));
-        // this.latestDataCache[symbol] = data;
-        console.log(`current cache after adding data: ${JSON.stringify(this.redisClientCache.get(symbol))}`);
-
+        try {
+            await this.redisClientCache.set(symbol, JSON.stringify(data));
+            let cachedData = await this.redisClientCache.get(symbol); // To confirm data was added
+            console.log(`current cache after adding data: ${cachedData}`);
+        } catch (error) {
+            console.error('Redis error:', error);
+        }
     }
 
-    public sendDataFromCache(symbol: string, ws: WebSocket): any {
-        console.log(`current cache: ${JSON.stringify(this.redisClientCache.get(symbol))}`);
-        // if (this.latestDataCache[symbol]) {
-        // console.log(`Sending data from cache to ${symbol}`);
-        const data = this.redisClientCache.get(symbol);
-        if (data) {
-            ws.send(JSON.stringify(data));
+    public async sendDataFromCache(symbol: string, ws: WebSocket) {
+        console.log(`current cache: ${await this.redisClientCache.get(symbol)}`);
+        try {
+            const data = await this.redisClientCache.get(symbol);
+            console.log(`current cache: ${data}`);
+            if (data) {
+                ws.send(data);
+            }
+        } catch (error) {
+            console.error('Redis error when sending data:', error);
         }
-        // ws.send(JSON.stringify(this.latestDataCache[symbol]));
-        // }
+
     }
 }
 
