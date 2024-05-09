@@ -126,7 +126,7 @@ class PubSubManager {
     public async addDataToCache(symbol: string, data: any) {
         console.log(`Adding data to cache for ${symbol}`);
         try {
-            await this.redisClientCache.set(symbol, JSON.stringify(data.values));
+            await this.redisClientCache.set(symbol, JSON.stringify(data));
             let cachedData = await this.redisClientCache.get(symbol); // To confirm data was added
             console.log(`current cache after adding data: ${cachedData}`);
         } catch (error) {
@@ -135,12 +135,15 @@ class PubSubManager {
     }
 
     public async sendDataFromCache(symbol: string, ws: WebSocket) {
+        console.log(`Sending data from cache for ${symbol}`);
         console.log(`current cache: ${await this.redisClientCache.get(symbol)}`);
         try {
             const data = await this.redisClientCache.get(symbol);
-            console.log(`current cache: ${data}`);
+            
             if (data) {
-                ws.send(data);
+                const newdata = JSON.parse(data);
+                newdata[symbol] = { values:  newdata.values }
+                ws.send(newdata);
             }
         } catch (error) {
             console.error('Redis error when sending data:', error);
