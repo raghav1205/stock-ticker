@@ -25,8 +25,8 @@ const publishStockPrice = async (symbols: string[]) => {
         // console.log(response.data);
         
         for (const symbol of symbols) { 
-            PubSubManager.addDataToCache(symbol, response.data[symbol]);
-            PubSubManager.publish(symbol, response.data[symbol]);
+            PubSubManager.addDataToCache(symbol, response.data);
+            PubSubManager.publish(symbol, response.data);
            
         }
     }
