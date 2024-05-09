@@ -11,7 +11,7 @@ const StockDashboard = () => {
     console.log(data)
    
     return (
-        <div className="p-5 pt-8 mb-8 dark:bg-[#121212] bg-[#ffff] w-full dark:text-white h-auto min-h-screen">
+        <div className="p-5 pt-8 pb-8 dark:bg-[#121212] bg-[#ffff] w-full dark:text-white h-auto min-h-screen">
             <h1 className="text-4xl text-center mb-20">Stock Ticker</h1>
             <div className="max-w-2xl mx-auto ">
                 {data.length > 0 && data.map((stock: any) => {
