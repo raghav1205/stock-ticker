@@ -60,12 +60,12 @@ class PubSubManager {
 
         //subscribe redis client if this is the first subscriber
         if (this.subscribers.get(symbol)!.size === 1) {
-            console.log(`Subscribing to ${symbol} in Redis 1`);
+            // console.log(`Subscribing to ${symbol} in Redis 1`);
             try {
                 const res = this.redisClient.subscribe(symbol, (message) => {
                     // if (this.subscribers.get(symbol)) {
-                    console.log(`Subscribing to ${symbol} in Redis 2`);
-                    console.log(`Received message from Redis: ${message}`)
+                    // console.log(`Subscribing to ${symbol} in Redis 2`);
+                    // console.log(`Received message from Redis: ${message}`)
                     this.subscribers.get(symbol)!.forEach((subscriber) => {
                         const stockInfo = JSON.parse(message);
                         const stockObj: StockObjInterface = {}
@@ -117,6 +117,13 @@ class PubSubManager {
     public addDataToCache(symbol: string, data: any): void {
         console.log(`Adding data to cache for ${symbol}`);
         this.latestDataCache[symbol] = data;
+    }
+
+    public sendDataFromCache(symbol: string, ws: WebSocket): any {
+        if (this.latestDataCache[symbol]) {
+            console.log(`Sending data from cache to ${symbol}`);
+            ws.send(JSON.stringify(this.latestDataCache[symbol]));
+        }
     }
 }
 

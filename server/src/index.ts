@@ -18,6 +18,7 @@ try {
             const parsedMessage = JSON.parse(message.toString());
             if (parsedMessage.action === 'subscribe') {
                 pubSubManager.addUser(parsedMessage.payload, ws);
+                pubSubManager.sendDataFromCache(parsedMessage.payload, ws);
             }
 
 
