@@ -24,9 +24,10 @@ const publishStockPrice = async (symbols: string[]) => {
         const response = await axios.get(url);
         console.log(response.data);
         
-        for (const symbol of symbols) {
-            PubSubManager.publish(symbol, response.data);
+        for (const symbol of symbols) { 
             PubSubManager.addDataToCache(symbol, response.data);
+            PubSubManager.publish(symbol, response.data);
+           
         }
     }
     catch (error) {

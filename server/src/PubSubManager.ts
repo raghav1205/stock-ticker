@@ -115,6 +115,7 @@ class PubSubManager {
     }
 
     public addDataToCache(symbol: string, data: any): void {
+        console.log(`Adding data to cache for ${symbol}`);
         this.latestDataCache[symbol] = data;
     }
 }
