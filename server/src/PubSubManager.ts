@@ -16,6 +16,7 @@ class PubSubManager {
     private static instance: PubSubManager;
     private redisClient: RedisClientType
     private subscribers: Map<string, Set<WebSocket>>;
+    private latestDataCache: StockObjInterface
 
     private constructor() {
         this.redisClient = createClient({
@@ -30,6 +31,7 @@ class PubSubManager {
         }
         this.redisClient.connect();
         this.subscribers = new Map<string, Set<WebSocket>>();
+        this.latestDataCache = {}
     }
 
     public static getInstance(): PubSubManager {
@@ -48,6 +50,12 @@ class PubSubManager {
 
         this.subscribers.get(symbol)!.add(ws);
         console.log(`Added user to ${symbol}. Total subscriptions: ${this.subscribers.get(symbol)!.size}`);
+
+        // send data from cache initially
+        if (this.latestDataCache[symbol]) {
+            ws.send(JSON.stringify(this.latestDataCache[symbol]));
+        }
+
 
 
         //subscribe redis client if this is the first subscriber
@@ -104,6 +112,10 @@ class PubSubManager {
         ).catch((error) => {
             console.error(`Error publishing to Redis: ${error}`);
         });
+    }
+
+    public addDataToCache(symbol: string, data: any): void {
+        this.latestDataCache[symbol] = data;
     }
 }
 
