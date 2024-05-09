@@ -75,7 +75,7 @@ class PubSubManager {
                 const res = this.redisClient.subscribe(symbol, (message) => {
                     // if (this.subscribers.get(symbol)) {
                     // console.log(`Subscribing to ${symbol} in Redis 2`);
-                    // console.log(`Received message from Redis: ${message}`)
+                    console.log(`Received message from Redis: ${message}`)
                     this.subscribers.get(symbol)!.forEach((subscriber) => {
                         const stockInfo = JSON.parse(message);
                         // const stockObj: StockObjInterface = {}
@@ -130,7 +130,7 @@ class PubSubManager {
         try {
             await this.redisClientCache.set(symbol, JSON.stringify(data));
             let cachedData = await this.redisClientCache.get(symbol); // To confirm data was added
-            // console.log(`current cache after adding data: ${cachedData}`);
+            console.log(`current cache after adding data: ${cachedData}`);
         } catch (error) {
             console.error('Redis error:', error);
         }
