@@ -78,15 +78,15 @@ class PubSubManager {
                     // console.log(`Received message from Redis: ${message}`)
                     this.subscribers.get(symbol)!.forEach((subscriber) => {
                         const stockInfo = JSON.parse(message);
-                        const stockObj: StockObjInterface = {}
-                        Object.keys(stockInfo).forEach((key) => {
-                            if (typeof key === 'string') {
-                                stockObj[key] = { values: [] }
-                                stockObj[key].values = stockInfo[key].values
-                            }
-                        })
+                        // const stockObj: StockObjInterface = {}
+                        // Object.keys(stockInfo).forEach((key) => {
+                        //     if (typeof key === 'string') {
+                        //         stockObj[key] = { values: [] }
+                        //         stockObj[key].values = stockInfo[key].values
+                        //     }
+                        // })
 
-                        subscriber.send(JSON.stringify(stockObj));
+                        subscriber.send(JSON.stringify(stockInfo));
                     });
                     // }
                 });
@@ -141,11 +141,11 @@ class PubSubManager {
             const data = await this.redisClientCache.get(symbol);
             // console.log(`current cache: ${data}`);
             if (data) {
-                // const newdata = JSON.parse(data);
-                // const stockObj: StockObjInterface = {}
-                // stockObj[symbol] = { values: newdata[symbol].values}
-                // console.log(`Sending data from cache for ${symbol}: ${JSON.stringify(stockObj)}`);
-                ws.send(data);
+                const parsedData = JSON.parse(data);
+                const stockObj: StockObjInterface = {}
+                stockObj[symbol] = parsedData
+               
+                ws.send(JSON.stringify(stockObj));
             }
         } catch (error) {
             console.error('Redis error when sending data:', error);
