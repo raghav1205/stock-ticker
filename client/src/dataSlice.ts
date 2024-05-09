@@ -11,7 +11,7 @@ const dataSlice = createSlice({
     initialState,
     reducers: {
         setData(state, action) {
-            console.log(action.payload);
+            // console.log(action.payload);
             Object.keys(action.payload).forEach((key: string) => {
                
                 // // console.log(key)
@@ -24,14 +24,14 @@ const dataSlice = createSlice({
                 //     }
                 //     )
 
-                console.log(key, action.payload[key], 'asdfksiu');
+                // console.log(key, action.payload[key], 'asdfksiu');
                 // });
                 const stockObj = { [key]: action.payload[key] }
                 state.data = [...state.data.filter((item: any) => !item.hasOwnProperty(key)), stockObj];
                 
             });
 
-            console.log(state.data);
+            // console.log(state.data);
             console.log('setData');
         }
 

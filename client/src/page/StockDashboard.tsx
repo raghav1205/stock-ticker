@@ -3,22 +3,24 @@ import useSocket from "../hooks/useSocket"
 import { Line } from "react-chartjs-2";
 import 'chart.js/auto';
 import { StockItemData } from "../types/StockItemData";
+import { useMemo } from "react";
 
 const StockDashboard = () => {
     useSocket('wss://stock-ticker.multiplayerbackend.tech');
-    const data = useSelector((state: any) => state.data.data);
+    const data = useSelector((state: any) => state.data.data || []);
     console.log(data)
+   
     return (
         <div className="p-5 pt-8 dark:bg-[#121212] bg-[#ffff] w-full dark:text-white h-screen">
             <h1 className="text-4xl text-center mb-20">Stock Ticker</h1>
-            <div className="max-w-2xl mx-auto">
+            <div className="max-w-2xl mx-auto ">
 
                 {
-                    data.map((stock: any) => {
+                   data.length > 0 && data.map((stock: any) => {
                         console.log(stock)
                         const key = Object.keys(stock)[0]
                         const latestData: StockItemData = stock[key][0]
-                        const currentPrice = parseFloat(latestData.close.toString()).toFixed(2)
+                        const currentPrice = parseFloat(latestData?.close?.toString()).toFixed(2)
                         const chartData: { labels: string[], datasets: { labels: [], data: any, borderColor: string, tension: number }[] } = {
                             labels: [],
                             datasets: [
@@ -30,15 +32,15 @@ const StockDashboard = () => {
                                 }
                             ]
                         }
-                        stock[key].forEach((value: any) => {
-                            chartData.labels.push(value.datetime)
-                            chartData.datasets[0].data.push(parseFloat(value.close))
+                        stock[key]?.forEach((value: any) => {
+                            chartData?.labels.push(value?.datetime)
+                            chartData?.datasets[0].data.push(parseFloat(value?.close))
                         })
 
-                        return <div key={key} className="mx-auto grid grid-cols-3 font-semibold text-lg h-20  items-center justify-between px-8 py-2 rounded-md mt-5   shadow-xl bg-[#ffff]   dark:bg-[#1E1E1E]">
+                        return <div key={key} className="mx-auto grid grid-cols-3 font-semibold text-lg h-[5rem]  items-center justify-between px-8 py-2 rounded-md mt-5 shadow-xl dark:shadow-lg bg-[#ffff]   dark:bg-[#1E1E1E]">
                             <h3>{key}</h3>
                             <span>${currentPrice}</span>
-                            <StockChart key={Math.random() * 10} data={chartData} />
+                            <StockChart key={key} data={chartData} />
                         </div>
 
                     })
@@ -49,29 +51,16 @@ const StockDashboard = () => {
     )
 }
 
-// const StockComponent = ({ data }: any) => {
-//     console.log(data)
-//     return (
-//         <div>
-//             {/* <h4>{data.name}</h4> */}
-//             <ul>
-//                 {Object?.keys(data).map((key: any) => {
-//                     return (
-//                         // <></>
-//                         <li key={key}>{data[key]}</li>
-//                     )
-//                 }
-//                 )}
-
-
-//             </ul>
-//         </div>
-//     )
-
-// }
 
 const StockChart = ({ data }: any) => {
-    const options = {
+    if (!data || !data.labels || data.labels.length === 0 || !data.datasets || data.datasets.length === 0) {
+        return <p>Loading chart...</p>;
+    }
+    console.log('Rendering StockChart', data);
+    const memoizedData = useMemo(() => data, [data]);
+
+    
+    const options = useMemo(() => ({
         elements: {
             point: {
                 radius: 0
@@ -79,22 +68,13 @@ const StockChart = ({ data }: any) => {
         },
         scales: {
             x: {
-                ticks: {
-                    display: false
-                },
-                grid: {
-                    display: false
-                },
-
+                ticks: { display: false },
+                grid: { display: false },
                 grace: '10%',
             },
             y: {
-                ticks: {
-                    display: false
-                },
-                grid: {
-                    display: false
-                },
+                ticks: { display: false },
+                grid: { display: false },
                 grace: '10%',
             }
         },
@@ -104,16 +84,14 @@ const StockChart = ({ data }: any) => {
             enabled: false
         },
         plugins: {
-            legend: {
-                display: false
-            },
-            tooltip: {
-                enabled: false // Disable tooltips for Chart.js version 2.x
-            },
+            legend: { display: false },
+            tooltip: { enabled: false } // Disabling tooltips for Chart.js 2.x, ensure this is updated if using Chart.js 3.x
         },
         maintainAspectRatio: true
-    };
-    return <Line data={data} options={options} />;
-}
+    }), []);
+
+    return <div className="max-w-[8rem]"> <Line data={memoizedData} options={options} /></div>
+};
+
 
 export default StockDashboard

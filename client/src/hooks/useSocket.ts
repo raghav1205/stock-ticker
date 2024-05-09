@@ -17,7 +17,7 @@ const useSocket = (url: string) => {
 
 
         ws.onmessage = (event) => {
-            console.log(`Received message from server: ${event.data}`);
+            // console.log(`Received message from server: ${event.data}`);
             // setMessage(JSON.parse(event.data));
             console.log('Received message from server');
             dispatch(setData(JSON.parse(event.data)));

@@ -85,8 +85,10 @@ class PubSubManager {
                         //         stockObj[key].values = stockInfo[key].values
                         //     }
                         // })
+                        const stockObj: StockObjInterface = {}
+                        stockObj[symbol] = stockInfo
 
-                        subscriber.send(JSON.stringify(stockInfo));
+                        subscriber.send(JSON.stringify(stockObj));
                     });
                     // }
                 });
