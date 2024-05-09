@@ -22,7 +22,7 @@ const publishStockPrice = async (symbols: string[]) => {
         const symbolString = symbols.join(',');
         const url = `${STOCK_API_URL}time_series?symbol=${symbolString}&interval=1min&format=JSON&start_date=${start_date}&end_date=${end_date}%&apikey=${STOCK_API_KEY}`;
         const response = await axios.get(url);
-        // console.log(response.data);
+        console.log('response', response.data);
         
         for (const symbol of symbols) { 
             PubSubManager.addDataToCache(symbol, response.data);
